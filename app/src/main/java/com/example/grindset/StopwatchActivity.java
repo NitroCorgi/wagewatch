@@ -1,29 +1,19 @@
 package com.example.grindset;
 
-import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.os.Handler;
 import android.view.View;
 import android.os.Bundle;
+
+import java.util.Calendar;
 import java.util.Locale;
+
+import android.widget.DatePicker;
 import android.widget.TextView;
-
-import android.os.Bundle;
-
-import com.google.android.material.snackbar.Snackbar;
+import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.view.View;
-
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import com.example.grindset.databinding.ActivityMainBinding;
-
-import android.view.Menu;
-import android.view.MenuItem;
 
 public class StopwatchActivity extends AppCompatActivity {
 
@@ -35,6 +25,8 @@ public class StopwatchActivity extends AppCompatActivity {
     private boolean running;
 
     private boolean wasRunning;
+
+    private Calendar startTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -55,6 +47,8 @@ public class StopwatchActivity extends AppCompatActivity {
             wasRunning
                     = savedInstanceState
                     .getBoolean("wasRunning");
+
+            startTime = (Calendar) savedInstanceState.getSerializable("startTime");
         }
         runTimer();
     }
@@ -71,6 +65,7 @@ public class StopwatchActivity extends AppCompatActivity {
                 .putBoolean("running", running);
         savedInstanceState
                 .putBoolean("wasRunning", wasRunning);
+        savedInstanceState.putSerializable("startTime", startTime);
     }
 
     // If the activity is paused,
@@ -123,6 +118,28 @@ public class StopwatchActivity extends AppCompatActivity {
         seconds = 0;
     }
 
+    public void onClickSetStartTime(View view) {
+        final Calendar currentDateAndTime = Calendar.getInstance();
+
+        new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                startTime = Calendar.getInstance();
+                startTime.set(Calendar.YEAR, year);
+                startTime.set(Calendar.MONTH, monthOfYear);
+                startTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                new TimePickerDialog(StopwatchActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        startTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        startTime.set(Calendar.MINUTE, minute);
+                    }
+                }, currentDateAndTime.get(Calendar.HOUR_OF_DAY), currentDateAndTime.get(Calendar.MINUTE), true).show();
+            }
+        }, currentDateAndTime.get(Calendar.YEAR), currentDateAndTime.get(Calendar.MONTH), currentDateAndTime.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
     // Sets the NUmber of seconds on the timer.
     // The runTimer() method uses a Handler
     // to increment the seconds and
@@ -134,6 +151,7 @@ public class StopwatchActivity extends AppCompatActivity {
         final TextView timeView
                 = (TextView)findViewById(
                 R.id.time_view);
+
 
         // Creates a new Handler
         final Handler handler
@@ -150,7 +168,19 @@ public class StopwatchActivity extends AppCompatActivity {
 
             public void run()
             {
-                int hours = seconds / 3600;
+                if (startTime != null) {
+                    long elapsedTime = Calendar.getInstance().getTimeInMillis() - startTime.getTimeInMillis();
+                    seconds = (int) (elapsedTime / 1000);
+
+
+                    TextView timePassedTextView = findViewById(R.id.timePassedTextView);
+                    String startTimeString = startTime.getTime().toString(); // Example start time string
+                    String introText = getString(R.string.Intro, startTimeString);
+                    timePassedTextView.setText(introText);
+                }
+
+                int days = seconds / 86400;
+                int hours = (seconds / 3600) % 24;
                 int minutes = (seconds % 3600) / 60;
                 int secs = seconds % 60;
 
@@ -159,7 +189,7 @@ public class StopwatchActivity extends AppCompatActivity {
                 String time
                         = String
                         .format(Locale.getDefault(),
-                                "%d:%02d:%02d", hours,
+                                "%d Days and %d:%02d:%02d", days, hours,
                                 minutes, secs);
 
                 // Set the text view text.
