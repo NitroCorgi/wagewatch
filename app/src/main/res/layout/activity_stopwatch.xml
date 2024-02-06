@@ -7,54 +7,71 @@
     android:orientation="vertical"
     android:gravity="center|bottom"
 
-    android:background="#9E99A5"
+    android:background="#261D3A"
     android:padding="16dp"
     tools:context=".StopwatchActivity">
+
+    <TextView
+        android:id="@+id/Introduction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="80dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="@string/introduction"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="24sp"
+        android:typeface="sans" />
 
     <TextView
         android:id="@+id/timePassedTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:textAppearance="@android:style/TextAppearance.Large"
-        android:layout_marginBottom="10dp"
-        android:textSize="32sp" />
-
+        android:layout_marginBottom="50dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="@string/since_the_start_of_the_month_this_much_time_has_passed"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="48sp"
+        android:typeface="sans" />
 
     <TextView
         android:id="@+id/time_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="50dp"
+        android:fontFamily="sans-serif-medium"
+        android:textAlignment="center"
         android:textAppearance="@android:style/TextAppearance.Large"
-        android:layout_marginBottom="20dp"
-        android:textSize="56sp" />
+        android:textSize="60sp" />
 
     <TextView
         android:id="@+id/moneyEarnedTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="100dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="@string/during_this_time_you_have_earned_0_00_eur"
+        android:textAlignment="center"
         android:textAppearance="@android:style/TextAppearance.Large"
-        android:text="During this time, you have earned 0.00 EUR"
-        android:layout_marginBottom="10dp"
-        android:textSize="32sp" />
+        android:textSize="48sp" />
 
-    <Button
-        android:id="@+id/set_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginTop="70dp"
-        android:onClick="onClickSetStartTime"
-        android:text="@string/set" />
 
     <Button
         android:id="@+id/setWageButton"
-        android:layout_width="wrap_content"
+        android:layout_width="230dp"
         android:layout_height="wrap_content"
-        android:text="Set Monthly Wage"
-        android:onClick="onClickSetWage" />
+        android:onClick="onClickSetWage"
+        android:rotationY="0"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
+        android:text="@string/set_monthly_wage"
+        android:layout_marginBottom="15dp"
+        app:rippleColor="#673AB7" />
 
     <EditText
         android:id="@+id/wageInputField"
@@ -62,46 +79,13 @@
         android:layout_height="wrap_content"
         android:inputType="numberDecimal"
         android:visibility="gone"
-        android:layout_below="@id/setWageButton"/>
+        android:autofillHints=""
+        tools:ignore="LabelFor" />
 
     <TextView
         android:id="@+id/wageTextView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Monthly Wage: 0.00 euros"
-        android:layout_below="@id/wageInputField"/>
+        android:layout_height="31dp"
+        android:text="@string/monthly_wage_0_00_euros" />
 
-
-
-    <LinearLayout android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/start_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="0dp"
-            android:onClick="onClickStart"
-            android:text="@string/start" />
-
-        <Button
-            android:id="@+id/stop_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginStart="30dp"
-            android:onClick="onClickStop"
-            android:text="@string/stop" />
-
-        <Button
-            android:id="@+id/reset_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginStart="30dp"
-            android:onClick="onClickReset"
-            android:text="@string/reset" />
-    </LinearLayout>
 </LinearLayout>

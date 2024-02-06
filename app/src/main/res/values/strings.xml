@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">WageWatch</string>
-    <string name="start">Start</string>
-    <string name="stop">Stop</string>
-    <string name="reset">Reset</string>
     <string name="set">Set Start Time</string>
-    <string name="Intro">Since %1$s, this much time has passed:</string>
+    <string name="Intro">Since %1$s, \n this much time has passed:</string>
     <string name="Money">During this time, you have earned: %1$d EUR</string>
+    <string name="since_the_start_of_the_month_this_much_time_has_passed">Since the start of the month, this much time has passed:</string>
+    <string name="during_this_time_you_have_earned_0_00_eur">During this time, you have earned 0.00 EUR</string>
+    <string name="set_monthly_wage">Set Monthly Wage</string>
+    <string name="monthly_wage_0_00_euros">Monthly Wage: 0.00 EUR</string>
+    <string name="introduction">Welcome to WageWatch! \n This app simply shows you how much time has passed for the month. \n Additionally, you can enter your monthly income to track your real-time income.</string>
 </resources>
