@@ -5,4 +5,5 @@
     <string name="reset">Reset</string>
     <string name="set">Set Start Time</string>
     <string name="Intro">Since %1$s, this much time has passed:</string>
+    <string name="Money">During this time, you have earned: %1$d EUR</string>
 </resources>

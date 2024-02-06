@@ -27,8 +27,18 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:textAppearance="@android:style/TextAppearance.Large"
-        android:layout_marginBottom="300dp"
+        android:layout_marginBottom="20dp"
         android:textSize="56sp" />
+
+    <TextView
+        android:id="@+id/moneyEarnedTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textAppearance="@android:style/TextAppearance.Large"
+        android:text="During this time, you have earned 0.00 EUR"
+        android:layout_marginBottom="10dp"
+        android:textSize="32sp" />
 
     <Button
         android:id="@+id/set_button"
@@ -39,6 +49,30 @@
         android:onClick="onClickSetStartTime"
         android:text="@string/set" />
 
+    <Button
+        android:id="@+id/setWageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Set Monthly Wage"
+        android:onClick="onClickSetWage" />
+
+    <EditText
+        android:id="@+id/wageInputField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:visibility="gone"
+        android:layout_below="@id/setWageButton"/>
+
+    <TextView
+        android:id="@+id/wageTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Monthly Wage: 0.00 euros"
+        android:layout_below="@id/wageInputField"/>
+
+
+
     <LinearLayout android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -48,7 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="0dp"
             android:onClick="onClickStart"
             android:text="@string/start" />
 

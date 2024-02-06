@@ -1,15 +1,20 @@
 package com.example.grindset;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.view.View;
 import android.os.Bundle;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Locale;
 
+import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -28,11 +33,25 @@ public class StopwatchActivity extends AppCompatActivity {
 
     private Calendar startTime;
 
+    private double monthlyWageEuro = 0.0;
+
+    private final int daysOfCurrentMonth = getDaysOfCurrentMonth();
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stopwatch);
+
+        Button setWageButton = findViewById(R.id.setWageButton);
+
+        setWageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickSetWage();
+            }
+        });
+
         if (savedInstanceState != null) {
 
             // Get the previous state of the stopwatch
@@ -47,6 +66,7 @@ public class StopwatchActivity extends AppCompatActivity {
             wasRunning
                     = savedInstanceState
                     .getBoolean("wasRunning");
+            monthlyWageEuro = savedInstanceState.getDouble("monthlyWageEuro");
 
             startTime = (Calendar) savedInstanceState.getSerializable("startTime");
         }
@@ -65,6 +85,7 @@ public class StopwatchActivity extends AppCompatActivity {
                 .putBoolean("running", running);
         savedInstanceState
                 .putBoolean("wasRunning", wasRunning);
+        savedInstanceState.putDouble("monthlyWageEuro", monthlyWageEuro);
         savedInstanceState.putSerializable("startTime", startTime);
     }
 
@@ -140,6 +161,58 @@ public class StopwatchActivity extends AppCompatActivity {
         }, currentDateAndTime.get(Calendar.YEAR), currentDateAndTime.get(Calendar.MONTH), currentDateAndTime.get(Calendar.DAY_OF_MONTH)).show();
     }
 
+    public void onClickSetWage() {
+        // Create an AlertDialog with an EditText field for numeric input
+        final EditText input = new EditText(this);
+        input.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Enter Monthly Wage (Euro)")
+                .setView(input)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        String wageStr = input.getText().toString();
+                        try {
+                            monthlyWageEuro = Double.parseDouble(wageStr);
+                            updateWageTextView();
+                        } catch (NumberFormatException e) {
+                            // Handle if the entered wage is not a valid number
+                            e.printStackTrace();
+                        }
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        // Canceled.
+                    }
+                })
+                .show();
+    }
+
+    private void updateWageTextView() {
+        // Format the monthly wage string
+        String wageText = String.format(Locale.getDefault(), "Monthly Wage: %.2f euros", monthlyWageEuro);
+
+        // Set the formatted text to the TextView
+        TextView wageTextView = findViewById(R.id.wageTextView);
+        wageTextView.setText(wageText);
+    }
+
+    private int getDaysOfCurrentMonth() {
+        // Get the current date
+        Calendar calendar = Calendar.getInstance();
+        int currentMonth = calendar.get(Calendar.MONTH);
+
+        // Set the calendar to the first day of the next month
+        calendar.set(Calendar.MONTH, currentMonth + 1);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+
+        // Subtracting one day gets us the last day of the current month
+        calendar.add(Calendar.DATE, -1);
+        return calendar.get(Calendar.DAY_OF_MONTH);
+    }
+
+
     // Sets the NUmber of seconds on the timer.
     // The runTimer() method uses a Handler
     // to increment the seconds and
@@ -194,6 +267,13 @@ public class StopwatchActivity extends AppCompatActivity {
 
                 // Set the text view text.
                 timeView.setText(time);
+
+                double earnedWage = (monthlyWageEuro / (daysOfCurrentMonth * 86400)) * seconds;
+                String wageEarnedText = String.format(Locale.getDefault(), "During this time, you have earned %.5f EUR.", earnedWage);
+
+                // Set the formatted text to the TextView
+                TextView moneyEarnedTextView = findViewById(R.id.moneyEarnedTextView);
+                moneyEarnedTextView.setText(wageEarnedText);
 
                 // If running is true, increment the
                 // seconds variable.
